@@ -1,0 +1,29 @@
+{
+  "name": "api_mplay",
+  "version": "1.0.0",
+  "description": "Este es un proyecto web, destinado a ofrecer los servicios de series televisivas y peliculas a todo el publico en general.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsarmiento1614/API-MPLAY.git"
+  },
+  "author": "JSarmiento",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsarmiento1614/API-MPLAY/issues"
+  },
+  "homepage": "https://github.com/jsarmiento1614/API-MPLAY#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "mssql": "^4.2.3",
+    "multer": "^1.4.1",
+    "path": "^0.12.7"
+  }
+}
