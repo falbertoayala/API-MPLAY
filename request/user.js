@@ -23,23 +23,81 @@ module.exports = (app, sql, sqlconfig) => {
         } else {
 
             var q = `insert into dbo.Users([First_Name], [Email], [Password], [Birth_Date]) values('${name}', '${email}', '${pass}', cast(${birthDay} as smalldatetime))`;
+            ConnectionPool(q, res);
 
-            new sql.ConnectionPool(sqlconfig).connect().then(pool => {
-                    return pool.query(q)
-                })
-                .then(result => {
-                    var data = {
-                        success: true,
-                        message: `Se ha creado ${result.rowsAffected} registro nuevo`
-                    }
-                    res.send(data);
-                })
-                .catch(err => {
-                    console.error(err);
-                });
-
+            getIdUserRegister(email, pass, res);
         }
     });
+    
+    // Obtener Id del usuario registrado
+    var getIdUserRegister = (email, pass, res)=>{
+        var q = `select UserID from dbo.Users where [Email]='${email}' and [Password]='${pass}'`;
+
+        new sql.ConnectionPool(sqlconfig).connect().then(pool => {
+            return pool.query(q)
+        })
+        .then(result => {
+            var data = {
+                success: true,
+                message: '',
+                UserID: result.recordset
+            }
+            UserIdData = data.UserID[0].UserID
+            userDefaultData(UserIdData);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+
+        
+    }
+
+   
+
+
+// Funcion para llenar datos por defalut al usuario registrado
+ var userDefaultData = (UserIdData, res) => {
+        let id=UserIdData;
+        console.log(`Estoy imprimiendo ${id}`);
+        let lastName = '';
+        let gender = '';
+        let userName = '';
+        let profilePicture = '';
+        let biography = '';
+        let country = '';
+        let city = '';
+        let areaCode = '';
+        console.log(lastName, gender, userName, profilePicture, biography, country, city, areaCode);
+
+            var q = `insert into dbo.User_Details([UserID],[Last_Name], [Gender], [UserName], [Profile_Picture], [Biography], [Country], [City], [Area_Code]) values(${id},'${lastName}', '${gender}', '${userName}','${profilePicture}','${biography}','${country}','${city}','${areaCode}')`;
+            new sql.ConnectionPool(sqlconfig).connect().then(pool => {
+                return pool.query(q)
+            })
+            .then(result => {
+            
+            })
+            .catch(err => {
+                console.error(err);
+            });
+           
+        }
+
+         // Declaro Funcion para realizar una sola conexion con la DB al introducir data.
+    var ConnectionPool = (q, res)=>{
+        new sql.ConnectionPool(sqlconfig).connect().then(pool => {
+            return pool.query(q)
+        })
+        .then(result => {
+            var data = {
+                success: true,
+                message: `Se ha creado ${result.rowsAffected} registro nuevo`
+            }
+            res.send(data);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    }
 
     app.post('/v1/Account/userDetails/:id', (req, res, next) => {
         let id = req.params.id;
