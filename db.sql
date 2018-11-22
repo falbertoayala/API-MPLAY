@@ -158,32 +158,31 @@ CREATE TABLE Rancking(
 /* Datos de Prueba Usuarios Registrados */
 /* ////////////////////////// */
 
-INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Jesus', 'jsarmiento@gmail.com','12345678910','31/05/1993')
-INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Juan', 'Juan@gmail.com','Juan10','01/02/1990')
-INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Marcos', 'Marcos@gmail.com','MarcosMarcos','15/08/1980')
-INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Julio', 'Julio@gmail.com','j_Julio','12/04/2000')
-INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Luis', 'Luis@gmail.com','Luis1614','21/03/1993')
-INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Carlos', 'Carlos@gmail.com','Carlos1614','23/01/1990')
-INSERT INTO dbo.Users([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Miguel', 'Miguel@gmail.com','Miguel2018','23/02/1999')
-INSERT INTO dbo.Users([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Victor', 'Victor@gmail.com','Victor_Victor','21/08/1996')
-INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Oslin', 'Oslin@gmail.com','Oslin_2017','11/04/1992')
-INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('David', 'David@gmail.com','David_F','19/08/1998')
+INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Jesus', 'jsarmiento@gmail.com','12345678910',cast(21/05/1998 as smalldatetime))
+INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Juan', 'Juan@gmail.com','Juan10',cast(11/05/1987 as smalldatetime))
+INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Marcos', 'Marcos@gmail.com','MarcosMarcos',cast(02/05/1970 as smalldatetime))
+INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Julio', 'Julio@gmail.com','j_Julio',cast(01/02/1893 as smalldatetime))
+INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Luis', 'Luis@gmail.com','Luis1614',cast(01/02/1999 as smalldatetime))
+INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Carlos', 'Carlos@gmail.com','Carlos1614',cast(31/06/1977 as smalldatetime))
+INSERT INTO dbo.Users([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Miguel', 'Miguel@gmail.com','Miguel2018',cast(17/01/1999 as smalldatetime))
+INSERT INTO dbo.Users([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Victor', 'Victor@gmail.com','Victor_Victor',cast(14/05/2000 as smalldatetime))
+INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('Oslin', 'Oslin@gmail.com','Oslin_2017',cast(16/07/2001 as smalldatetime))
+INSERT INTO dbo.Users ([First_Name], [Email], [Password], [Birth_Date]) VALUES ('David', 'David@gmail.com','David_F',cast(20/08/1993 as smalldatetime))
 
 /*/////////////////////////////*/
 
 Datos de Prueba Tabla Movies
 
 /*////////////////////////////*/
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'Venon','venon-0102.jpg','A','02:00','31/05/2012','Jonh Mclintong','Basada en hechos reales');
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Show', 'Smallville','Smallville-0102.jpg','B','02:20','31/05/2010','Luis Lopez','Cuando duperman estaba en nuestra tierra de forma adolecente');
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'xman','xman-0102.jpg','C','01:00','10/06/2011','Jonh Wood','Hombres Mutante tratando de dominar al mundo');
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'titanic','titanic-0102.jpg','D','03:40','31/07/2009','Cristopher Lucas','Basada en hechos reales');
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Show', 'La Calle','Calle-0102.jpg','A','01:50','31/07/2006','Marco Creativo','Hecho ocurrido hace mas de 100 anios');
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Show', 'Bons','Bons-0102.jpg','B','02:00','23/12/2000','Joseph Park','Investigadora de cuerpos fosificados');
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'Spiderman','Spiderman-0102.jpg','G','01:40','01/05/1946','Jonh Kirk','Hombre drasticamente picado por una arania mutantr');
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Show', 'The Walking Dead','Walking-0102.jpg','PG','02:50','03/05/1998','Zillas Zandobal','Sobies come carne, infectados por un virus');
-INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'Batman','Batman-0102.jpg','A','01:00','07/05/2000','James Bond','Basada en un joven que se enamoro de los murcielagos');
-
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'Venon','venon-0102.jpg','A','02:00',cast(18/02/2012 as smalldatetime),'Jonh Mclintong','Basada en hechos reales');
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Show', 'Smallville','Smallville-0102.jpg','B','02:20',cast(09/04/2013 as smalldatetime),'Luis Lopez','Cuando duperman estaba en nuestra tierra de forma adolecente');
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'xman','xman-0102.jpg','C','01:00',cast(30/09/2015 as smalldatetime),'Jonh Wood','Hombres Mutante tratando de dominar al mundo');
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'titanic','titanic-0102.jpg','D','03:40',cast(25/10/2018 as smalldatetime),'Cristopher Lucas','Basada en hechos reales');
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Show', 'La Calle','Calle-0102.jpg','A','01:50',cast(19/12/2000 as smalldatetime),'Marco Creativo','Hecho ocurrido hace mas de 100 anios');
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Show', 'Bons','Bons-0102.jpg','B','02:00',cast(12/11/2006 as smalldatetime),'Joseph Park','Investigadora de cuerpos fosificados');
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'Spiderman','Spiderman-0102.jpg','G','01:40',cast(10/08/1997 as smalldatetime),'Jonh Kirk','Hombre drasticamente picado por una arania mutantr');
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Show', 'The Walking Dead','Walking-0102.jpg','PG','02:50',cast(15/06/1998 as smalldatetime),'Zillas Zandobal','Sobies come carne, infectados por un virus');
+INSERT INTO dbo.Movies([Type], [Name], [Thumb],[Classification],[Time],[Release_Date],[Director],[Sinopsis]) VALUES ('Movie', 'Batman','Batman-0102.jpg','A','01:00',cast(11/10/1995 as smalldatetime),'James Bond','Basada en un joven que se enamoro de los murcielagos');
 
 //////////////////////////////////////////
 DATOS DE PRUEBA GENEROS
@@ -199,12 +198,11 @@ insert into dbo.Genres ([Genred])values('Misterioso');
 
 DATOS DE PRUEBA GENEROS DE LAS PELICULAS
 //////////////////////////////////////
-INSERT INTO dbo.Movies_Genres([Movie_Or_Show_ID],[Genres_ID]) values(1,5)
-INSERT INTO dbo.Movies_Genres([Movie_Or_Show_ID],[Genres_ID]) values(2,4)
-INSERT INTO dbo.Movies_Genres([Movie_Or_Show_ID],[Genres_ID]) values(6,5)
-INSERT INTO dbo.Movies_Genres([Movie_Or_Show_ID],[Genres_ID]) values(11,3)
-INSERT INTO dbo.Movies_Genres([Movie_Or_Show_ID],[Genres_ID]) values(1,4)
-INSERT INTO dbo.Movies_Genres([Movie_Or_Show_ID],[Genres_ID]) values(10,6)
+INSERT INTO dbo.Movies_Genres([MoviesID],[Genres_ID]) values(2,4)
+INSERT INTO dbo.Movies_Genres([MoviesID],[Genres_ID]) values(3,5)
+INSERT INTO dbo.Movies_Genres([MoviesID],[Genres_ID]) values(4,4)
+INSERT INTO dbo.Movies_Genres([MoviesID],[Genres_ID]) values(5,6)
+INSERT INTO dbo.Movies_Genres([MoviesID],[Genres_ID]) values(6,7)
 //////////////////////////////////////////
 
 DATOS DE PRUEBA
@@ -227,10 +225,10 @@ inner join Movies m On l.MoviesID = m.MoviesID
 
 select * from dbo.Rancking
 
-INSERT INTO dbo.Rancking (UserID, MoviesID) VALUES(1,1)
-INSERT INTO dbo.Rancking (UserID, MoviesID) VALUES(1,2)
-INSERT INTO dbo.Rancking (UserID, MoviesID) VALUES(2,1)
-INSERT INTO dbo.Rancking (UserID, MoviesID) VALUES(1,3)
+INSERT INTO dbo.Rancking (UserID, MoviesID) VALUES(4,3)
+INSERT INTO dbo.Rancking (UserID, MoviesID) VALUES(5,2)
+INSERT INTO dbo.Rancking (UserID, MoviesID) VALUES(6,4)
+INSERT INTO dbo.Rancking (UserID, MoviesID) VALUES(7,5)
 
 select COUNT(*) from Users u
 inner join Rancking l ON u.UserID = l.UserID
