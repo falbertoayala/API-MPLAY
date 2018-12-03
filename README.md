@@ -31,13 +31,17 @@ POST /v1/Account/socialNetworks?nameSocialNetworks={nameSocialNetworks}&urlSocia
 POST /v1/Account/Logout
 
 * Informacion de la cuenta
-GET /v1/Account/UserInfo
+GET /v1/Account/UserInfo/:id
 
-* Cambiar contrasenia
+* Cambiar contrasenia (wait the finish)
 POST /v1/Account/ChangePassword
 ------------------------------------------------------------------------------
 
 **API MPLAY - MoviesOrShows**
+**ADD**
+* Agregar Peliculas.
+POST /v1/add/MoviesShows
+
 **FILTER**
 * Filtrar por todas las Movies y Shows
 GET /v1/MoviesShows/Filter/All
@@ -80,12 +84,14 @@ GET /v1/MoviesShows?like={id}
 
 
 
-DB_SERVER=localhost
-DB_USER=sa
-DB_PASS=Admin123
-DB_DATABASE=DB_MPLAY
-DB_PORT=1433
-APP_PORT=8090
+DB_SERVER=localhost 
+DB_USER=sa 
+DB_PASS=Admin123 
+DB_DATABASE=DBMPLAY 
+DB_PORT=1433 
+APP_PORT=8090 
 DB_INSTANCE_NAME=SQLEXPRESS
+SECRET_KEY=jsarmiento.mplay
+SENDGRID_API_KEY=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
 
 Envio de email sendgrid.com

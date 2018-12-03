@@ -2,37 +2,54 @@ let auth = require("./auth");
 const sgMail = require('@sendgrid/mail');
 module.exports = (app, sql, sqlconfig) => {
     // Mensaje de Bienvenida
-    app.get('/', (req, res) => {
+    app.get('/', (res) => {
         res.send('<h1>BIENVENIDO A MPLAY</h1>')
     });
 
-     // Declaro Funcion para realizar una sola conexion con la DB al introducir data.
-     var ConnectionPool = (q, res)=>{
+    // Funcion para realizar una sola conexion con la DB al introducir data.
+    var ConnectionPool_POST = (q, res) => {
         new sql.ConnectionPool(sqlconfig).connect().then(pool => {
-            return pool.query(q)
-        })
-        .then(result => {
-            var data = {
-                success: true,
-                message: `Se ha creado ${result.rowsAffected} registro nuevo`
-            }
-            res.send(data);
-        })
-        .catch(err => {
-            console.error(err);
-        });
+                return pool.query(q)
+            })
+            .then(result => {
+                var data = {
+                    success: true,
+                    message: `Se ha creado ${result.rowsAffected} registro nuevo`
+                }
+                res.send(data);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
 
-    // Funcion que me permite registrar nuevos usuarios
-    app.post('/v1/Account/Register', (req, res, next) => {
+    // Funcion para realizar una sola conexion con la DB al consultar data.
+    var ConnectionPool_GET = (q, res) => {
+        new sql.ConnectionPool(sqlconfig).connect().then(pool => {
+                return pool.query(q)
+            })
+            .then(result => {
+                var data = {
+                    success: true,
+                    message: ``,
+                    result: result.recordset
+                }
+                res.send(data);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
+    // Funcion para registrar nuevos usuarios
+    app.post('/v1/Account/Register', (req, res) => {
         let name = req.body.name;
         let email = req.body.email;
         let pass = req.body.pass;
         let repeatPass = req.body.repeatPass;
         let birthDay = req.body.birthDay;
         let acceptConditions = req.body.acceptConditions;
-        console.log(birthDay);
-        //console.log(name,email,pass, repeatPass, birthDay,acceptConditions)
+
         if (!name || !email || !pass || !repeatPass || !birthDay) {
             res.send("Debes completar los campos del formulario.");
         } else if (!acceptConditions) {
@@ -40,79 +57,72 @@ module.exports = (app, sql, sqlconfig) => {
         } else if (pass != repeatPass) {
             res.send("Las contraseñas no coinciden.");
         } else {
+
             var q = `insert into dbo.Users([First_Name], [Email], [Password], [Birth_Date]) values('${name}', '${email}', '${pass}', cast(${birthDay} as smalldatetime))`;
-            ConnectionPool(q, res);
+            new sql.ConnectionPool(sqlconfig).connect().then(pool => {
+                    return pool.query(q)
+            })
+            .then(result => {
+                var data = {
+                    success: true,
+                    message: `Se ha creado ${result.rowsAffected} registro nuevo`,
+                }
+                res.send(data);
+                // Funcion para generar el id mandando el email, pass y quien genera la llamada para obtener el respectivo id.
+                generateId(email, pass, 'userDetails');
+                 // envio de email a traves de sendgrid.com
+                sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+                const msg = {
+                    to: email,
+                    from: 'admin@mplay.com',
+                    subject: 'Welcome to aur Service',
+                    text: 'Hey, Welcome to MPLAY!!!',
+                    html: `${name} You new account <strong> is ready </strong>`,
+                };
+                //console.log(msg);
+                sgMail.send(msg);
+                //console.log(sgMail);    
+            })
+            .catch(err => {
+                console.error(err);
+            });
            
-
-           // getIdUserRegister(email, pass, res);
-
-            // envio de email a traves de sendgrid.com
-            sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-            const msg = {
-                to: email,
-                from: 'admin@example.com',
-                subject: 'Welcome to my Service',
-                text: 'Hey, Welcome to my jungle!!!',
-                html: `You new account is <strong>${email}</strong>`,
-            };
-            sgMail.send(msg);
         }
     });
-    
-    // Obtener Id del usuario registrado
-    var getIdUserRegister = (email, pass, res)=>{
-        var q = `select UserID from dbo.Users where [Email]='${email}' and [Password]='${pass}'`;
 
-        new sql.ConnectionPool(sqlconfig).connect().then(pool => {
-            return pool.query(q)
-        })
-        .then(result => {
-            var data = {
-                success: true,
-                message: '',
-                UserID: result.recordset
-            }
-            UserIdData = data.UserID[0].UserID
-            userDefaultData(UserIdData);
+    // funcion para agregar redes sociales por el usuario
+    app.post('/v1/Account/socialNetworks:id', (req, res) => {
+        var id = req.params.id;
 
-        })
-        .catch(err => {
-            console.error(err);
-        });  
-    }
+        if (!id) {
+            res.send("Error parametro id no existe");
+        }
 
-    // Funcion para llenar datos por defalut al usuario registrado
-    var userDefaultData = (UserIdData, res) => {
-            let id=UserIdData;
-            console.log(`Estoy imprimiendo ${id}`);
-            let lastName = '';
-            let gender = '';
-            let userName = '';
-            let profilePicture = '';
-            let biography = '';
-            let country = '';
-            let city = '';
-            let areaCode = '';
-            console.log(lastName, gender, userName, profilePicture, biography, country, city, areaCode);
+        let Name_Social_Networks = req.body.Name_Social_Networks;
+        let Url_Social_Networks = req.body.Url_Social_Networks;
 
-                var q = `insert into dbo.User_Details([UserID],[Last_Name], [Gender], [UserName], [Profile_Picture], [Biography], [Country], [City], [Area_Code]) values(${id},'${lastName}', '${gender}', '${userName}','${profilePicture}','${biography}','${country}','${city}','${areaCode}')`;
-                new sql.ConnectionPool(sqlconfig).connect().then(pool => {
-                    return pool.query(q)
-                })
-                .then(result => {
-                
-                })
-                .catch(err => {
-                    console.error(err);
-                });
-            
-    }
+        if (!Name_Social_Networks || !Url_Social_Networks) {
+            res.send("Los campos estan vacios");
+        } else {
+            var q = `INSERT INTO dbo.Social_Networks ([UserID], [Name_Social_Networks], [Url_Social_Networks]) 
+            VALUES ('${UserID}','${Name_Social_Networks}', '${Url_Social_Networks}')`
+
+            console.log(q);
+
+            ConnectionPool_POST(q, res);
+        }
+    });
+
+    // funcion para cerrar sesion.
+    app.post('/v1/Account/Logout', (req, res) => {
+        //esperando codigo
+    });
 
     app.post('/v1/Account/Login', (req, res, next)=>{
         var email = req.body.email;
         var password = req.body.password;
 
-        console.log(email + password)
+       // console.log(email + password)
         if(!email || !password){
             res.status(403).send({ message: "missing parameters"});
         }
@@ -142,12 +152,59 @@ module.exports = (app, sql, sqlconfig) => {
             return next(err);
         })
     });
-    
-    app.put('/v1/Account/userDetails/:id', (req, res, next) => {
+
+    // Obtener Id del usuario registrado
+    var generateId = (email, pass, generateTypeId) => {
+        var q = `select UserID from dbo.Users where [Email]='${email}' and [Password]='${pass}'`;
+
+        new sql.ConnectionPool(sqlconfig).connect().then(pool => {
+                return pool.query(q)
+            })
+            .then(result => {
+                var data = {
+                    result: result.recordset
+                }
+                if (generateTypeId === 'userDetails') {
+                    userDefaultData(data.result[0].UserID);
+                } else {
+                    console.log('Generacion de Id incorrecta');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
+    // Funcion para llenar datos por default al usuario registrado
+    var userDefaultData = (UserIdData) => {
+        let id = UserIdData;
+        let lastName = '';
+        let gender = '';
+        let userName = '';
+        let profilePicture = '';
+        let biography = '';
+        let country = '';
+        let city = '';
+        let areaCode = '';
+        console.log(lastName, gender, userName, profilePicture, biography, country, city, areaCode);
+
+        var q = `insert into dbo.User_Details([UserID],[Last_Name], [Gender], [UserName], [Profile_Picture], [Biography], [Country], [City], [Area_Code]) values(${id},'${lastName}', '${gender}', '${userName}','${profilePicture}','${biography}','${country}','${city}','${areaCode}')`;
+        new sql.ConnectionPool(sqlconfig).connect().then(pool => {
+                return pool.query(q)
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
+    // Funcion para actualizar los detalles del perfil de usuario
+    app.put('/v1/Account/userDetails/:id', (req, res) => {
         let id = req.params.id;
         console.log(id)
         if (!id) {
-            res.send({message: 'Error parametro id no existe'});
+            res.send({
+                message: 'Error parametro id no existe'
+            });
         }
 
         let lastName = req.body.lastName;
@@ -163,59 +220,20 @@ module.exports = (app, sql, sqlconfig) => {
         if (!lastName, !gender, !userName, !profilePicture, !biography, !country, !city, !areaCode) {
             res.send("Campos Vacios");
         } else {
-
-
-
             var q = `insert into dbo.User_Details([UserID],[Last_Name], [Gender], [UserName], [Profile_Picture], [Biography], [Country], [City], [Area_Code]) values(${id},'${lastName}', '${gender}', '${userName}','${profilePicture}','${biography}','${country}','${city}','${areaCode}')`;
-
-            new sql.ConnectionPool(sqlconfig).connect().then(pool => {
-                    return pool.query(q)
-                })
-                .then(result => {
-                    var data = {
-                        success: true,
-                        message: `Se ha creado ${result.rowsAffected} registro nuevo`
-                    }
-                    res.send(data);
-                })
-                .catch(err => {
-                    console.error(err);
-                });
+            ConnectionPool_POST(q, res);
         }
     });
 
-    app.post('/v1/Account/socialNetworks:id', (req, res, next) => {
+    // funcion para obtener toda la informacion del usuario.
+    app.get('/v1/Account/UserInfo/:id', (req, res) => {
         var id = req.params.id;
 
         if (!id) {
             res.send("Error parametro id no existe");
         }
 
-        let Name_Social_Networks = req.body.Name_Social_Networks;
-        let Url_Social_Networks = req.body.Url_Social_Networks;
-
-        if (!Name_Social_Networks || !Url_Social_Networks) {
-            res.send("Los campos estan vacios");
-        } else {
-            var q = `INSERT INTO dbo.Social_Networks ([UserID], [Name_Social_Networks], [Url_Social_Networks]) 
-            VALUES ('${UserID}','${Name_Social_Networks}', '${Url_Social_Networks}')`
-
-            console.log(q);
-
-            new sql.ConnectionPool(sqlconfig).connect().then(pool => {
-                    return pool.query(q)
-                })
-                .then(result => {
-                    var data = {
-                        sucess: true,
-                        message: `Se ha creado ${result.rowsAffected} registro nuevo`
-                    }
-                    res.send(data);
-                })
-                .catch(err => {
-                    return next(err);
-                })
-        }
+        var q = `select * from [dbo].[Users] u inner join [dbo].[User_Details] d on u.UserID = d.UserID`;
+        ConnectionPool_GET(q, res);
     });
-
 }
