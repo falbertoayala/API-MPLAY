@@ -33,4 +33,29 @@ module.exports = (app, sql, sqlconfig) => {
                 });
         }
     });
+    // Filtrar Peliculas y Shows
+
+    app.get("/v1/MoviesShows/Filter/All", req, res =>{
+
+        let Type = req.query.Type;
+
+        var q = `select * from [dbo].[Movies] where [Type] like '${Type}'`
+        
+        new sql.ConnectionPool(sqlconfig).connect().then(pool => {
+                return pool.query(q)
+        })
+        .then(result =>{
+            var data ={
+                success: true,
+                message : '',
+                result : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+
+
+    })
 }
