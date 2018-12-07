@@ -35,11 +35,10 @@ module.exports = (app, sql, sqlconfig) => {
     });
     // Filtrar Peliculas y Shows
 
-    app.get("/v1/MoviesShows/Filter/All", req, res =>{
+    app.get("/v1/MoviesShows/Filter/All", (req, res) =>{
 
-        let Type = req.query.Type;
-
-        var q = `select * from [dbo].[Movies] where [Type] like '${Type}'`
+       
+        var q = `select * from [dbo].[Movies]`
         
         new sql.ConnectionPool(sqlconfig).connect().then(pool => {
                 return pool.query(q)
@@ -47,15 +46,175 @@ module.exports = (app, sql, sqlconfig) => {
         .then(result =>{
             var data ={
                 success: true,
-                message : '',
-                result : result.recordset
+                message : 'Mostrando Series y Peliculas',
+                data : result.recordset,
             }
             res.send(data);
+            console.log(q)
         })
         .catch(err => {
             console.error(err);
         });
 
-
     })
+
+    //Filtra por Peliculas
+
+    app.get("/v1/MoviesShows/Filter/Movies", (req, res) =>{
+       
+        var q = `select * from [dbo].[Movies] where [Type] like 'Movie'`
+
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+
+            return pool.query(q)
+
+        })
+
+        .then(result => {
+            var data ={
+                success :true,
+                message : 'Mostrando Peliculas',
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+    });
+
+    //Filtra por Series
+
+    app.get("/v1/MoviesShows/Filter/Shows", (req, res) =>{
+        
+       
+        var q = `select * from [dbo].[Movies] where [Type] like 'Show'`
+
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+
+            return pool.query(q)
+
+        })
+
+        .then(result => {
+            var data ={
+                success :true,
+                message : 'Mostrando Series',
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+    });
+
+     
+    //Detalle de las Peliculas y Show
+
+    app.get("/v1/MoviesShows/:id/detalle", (req, res)=>{
+    
+        let id = req.params.id;
+        
+               
+        var q =`select * from [dbo].[Movies] where [dbo].[Movies].[MoviesID] = ${id}`
+        
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+            return pool.query(q)
+        })
+        .then(result => {
+            var data ={
+                success : true,
+                message : `Mostrando detalle`,
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+        
+    });
+
+     //Muestra el Trailer Show o Pelicula
+
+     app.get("/v1/MoviesShows/:id/trailler/", (req, res)=>{
+    
+        let id = req.params.id;
+        
+               
+        var q =`select Trailler from Trailers inner join Movies on Trailers.MoviesID = Movies.MoviesID = ${id}`
+        
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+            return pool.query(q)
+        })
+        .then(result => {
+            var data ={
+                success : true,
+                message : `Mostrando Trailer`,
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+        
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //Filtros por Tipo Genero Año y Clasificacion
+
+     /* app.get("/v1/MoviesShows/Filter/:Type", (req, res) =>{
+
+        let Type = req.params.Type;
+        let Release_Date = req.query.Release_Date;
+        let Genred = req.query.Genred;
+        let Rancking = req.params.Rancking;
+        let Classification = req.query.Classification;
+                
+               
+        var q = `select * from [dbo].[Movies] where [Type] like 'Show'`
+
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+
+            return pool.query(q)
+
+        })
+
+        .then(result => {
+            var data ={
+                success :true,
+                message : 'Mostrando Series',
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+    });
+
+
+ */
+
 }
