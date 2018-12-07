@@ -71,3 +71,4 @@ app.listen(parseInt(process.env.APP_PORT), () => {
 });
 
 require("./request/user")(app, sql, sqlconfig);
+require("./request/movies")(app, sql, sqlconfig);
