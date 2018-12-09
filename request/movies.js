@@ -109,6 +109,7 @@ module.exports = (app, sql, sqlconfig) => {
         })
     });
 
+    //Codigo de Consulta de los detalles
      
     //Detalle de las Peliculas y Show
 
@@ -138,12 +139,12 @@ module.exports = (app, sql, sqlconfig) => {
 
      //Muestra el Trailer Show o Pelicula
 
-     app.get("/v1/MoviesShows/:id/trailler/", (req, res)=>{
+     app.get("/v1/MoviesShows/:id/trailler", (req, res)=>{
     
         let id = req.params.id;
         
                
-        var q =`select Trailler from Trailers inner join Movies on Trailers.MoviesID = Movies.MoviesID = ${id}`
+        var q =`select Trailler from Trailers inner join Movies on Trailers.MoviesID = Movies.MoviesID  where Movies.MoviesID like ${id}`
         
         new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
             return pool.query(q)
@@ -161,6 +162,33 @@ module.exports = (app, sql, sqlconfig) => {
         })
         
     });
+
+    //Muestra la Imagen del  Show o Pelicula
+
+    app.get("/v1/MoviesShows/:id/images", (req, res)=>{
+    
+        let id = req.params.id;
+        
+               
+        var q =`select Image_URL  from Images inner join Movies on Images.MoviesID = Movies.MoviesID  where Movies.MoviesID like ${id}`
+        
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+            return pool.query(q)
+        })
+        .then(result => {
+            var data ={
+                success : true,
+                message : `Mostrando Trailer`,
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+        
+    });
+
     
     
     
