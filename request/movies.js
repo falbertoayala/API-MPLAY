@@ -109,6 +109,51 @@ module.exports = (app, sql, sqlconfig) => {
         })
     });
 
+    //Codigo para Guardar Likes
+     app.post("/v1/MoviesShows//Like/:IdMovie/:IdUser", (req,res) =>{
+         let iduser = req.params.iduser;
+         let idmovie = req.params.idmovie
+
+         var q = `insert into [dbo].[Likes]([UserID], [MoviesID]) values ('${iduser}', '${idmovie}')`;
+         new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+             return pool.query(q)
+         })
+         .then(result =>{
+             var data ={
+                 success : true,
+                 message : 'Gracias por su Like',
+                 data : result.recordset
+             }
+             res.send(data)
+         })
+         .catch(err =>{
+             console.log(err);
+         })
+     })
+
+
+    //Codigo para Buscar Por Nombre o Genero
+
+    app.get("/v1/MoviesShows/:searchTerm", (req, res)=>{
+        let search = req.query.search;
+        var q = ``
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+            return pool.query(q)
+        })
+        .then(result =>{
+            var data ={
+                success : true,
+                message : `Mostrando Busqueda`,
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.log(err);
+        })
+
+    })
+
     //Codigo de Consulta de los detalles
      
     //Detalle de las Peliculas y Show
@@ -116,8 +161,7 @@ module.exports = (app, sql, sqlconfig) => {
     app.get("/v1/MoviesShows/:id/detalle", (req, res)=>{
     
         let id = req.params.id;
-        
-               
+                       
         var q =`select * from [dbo].[Movies] where [dbo].[Movies].[MoviesID] = ${id}`
         
         new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
