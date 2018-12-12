@@ -109,10 +109,33 @@ module.exports = (app, sql, sqlconfig) => {
         })
     });
 
+    //Codigo para Rankiar peliculas
+    app.post("/v1/MoviesShows/Ranking", (req,res) =>{
+        let iduser = req.body.iduser;
+        let idmovie = req.body.idmovie
+
+        var q = `insert into [dbo].[Rancking]([UserID], [MoviesID]) values ('${iduser}', '${idmovie}')`;
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+            return pool.query(q)
+        })
+        .then(result =>{
+            var data ={
+                success : true,
+                message : 'Ranking',
+                data : result.recordset
+            }
+            res.send(data)
+        })
+        .catch(err =>{
+            console.log(err);
+        })
+    })
+
+
     //Codigo para Guardar Likes
-     app.post("/v1/MoviesShows//Like/:IdMovie/:IdUser", (req,res) =>{
-         let iduser = req.params.iduser;
-         let idmovie = req.params.idmovie
+     app.post("/v1/MoviesShows/Like", (req,res) =>{
+         let iduser = req.body.iduser;
+         let idmovie = req.body.idmovie
 
          var q = `insert into [dbo].[Likes]([UserID], [MoviesID]) values ('${iduser}', '${idmovie}')`;
          new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
@@ -186,8 +209,7 @@ module.exports = (app, sql, sqlconfig) => {
      app.get("/v1/MoviesShows/:id/trailler", (req, res)=>{
     
         let id = req.params.id;
-        
-               
+                       
         var q =`select Trailler from Trailers inner join Movies on Trailers.MoviesID = Movies.MoviesID  where Movies.MoviesID like ${id}`
         
         new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
@@ -215,6 +237,31 @@ module.exports = (app, sql, sqlconfig) => {
         
                
         var q =`select Image_URL  from Images inner join Movies on Images.MoviesID = Movies.MoviesID  where Movies.MoviesID like ${id}`
+        
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+            return pool.query(q)
+        })
+        .then(result => {
+            var data ={
+                success : true,
+                message : `Mostrando Trailer`,
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+        
+    });
+
+    //Mostra Ranking de la Pelicula
+
+    app.get("/v1/MoviesShows/:id/Likes", (req, res)=>{
+    
+        let id = req.params.id;
+                       
+        var q =`select count m.MoviesID, count(l.MoviesID) as Likes from Movies m  INNER join [dbo].[Likes] l on m.MoviesID = l.MoviesId GROUP BY m.MoviesID`
         
         new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
             return pool.query(q)
