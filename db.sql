@@ -1,3 +1,6 @@
+Usuario Db AWS = AdminBd
+Password = Admin123
+
 CREATE DATABASE DBMPLAY;
 
 go

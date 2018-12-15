@@ -49,7 +49,7 @@ const sqlconfig = {
     port: parseInt(process.env.DB_PORT),
     debug: true,
     options: {
-        encrypt: false,
+        encrypt: true,
         // instanceName: process.env.DB_INSTANCE_NAME
     }
 }
