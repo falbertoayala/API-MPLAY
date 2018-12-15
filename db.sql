@@ -1,5 +1,10 @@
-Usuario Db AWS = AdminBd
-Password = Admin123
+-- Usuario Db AWS = AdminBd
+-- Password = Admin123
+
+-- Access Key ID:
+-- AKIAJ6A7EXH2C2LTSW2A
+-- Secret Access Key:
+-- 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
 
 CREATE DATABASE DBMPLAY;
 
