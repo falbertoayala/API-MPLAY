@@ -255,21 +255,48 @@ module.exports = (app, sql, sqlconfig) => {
         
     });
 
-    //Mostra Ranking de la Pelicula
+    //Muestra los Likes de la Pelicula
 
     app.get("/v1/MoviesShows/:id/Likes", (req, res)=>{
     
         let id = req.params.id;
                        
-        var q =`select count m.MoviesID, count(l.MoviesID) as Likes from Movies m  INNER join [dbo].[Likes] l on m.MoviesID = l.MoviesId GROUP BY m.MoviesID`
-        
+        // var q =`select count (m.MoviesID) as Movies, count(l.MoviesID) as Likes from Movies m  INNER join [dbo].[Likes] l on m.MoviesID = l.MoviesId GROUP BY m.MoviesID`
+         var q = `Select (m.MoviesID) as Movie, count (l.MoviesID) as Likes from [Movies] m inner join [Likes] l on m.MoviesID = l.MoviesID where (m.MoviesID like ${id}) GROUP BY m.MoviesID`
+
         new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
             return pool.query(q)
         })
         .then(result => {
             var data ={
                 success : true,
-                message : `Mostrando Trailer`,
+                message : `Mostrando Likes de la Pelicula`,
+                data : result.recordset
+            }
+            res.send(data);
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+        
+    });
+
+    //Muestra el Ranking de la Pelicula
+
+    app.get("/v1/MoviesShows/:id/Ranking", (req, res)=>{
+    
+        let id = req.params.id;
+                       
+        // var q =`select count (m.MoviesID) as Movies, count(l.MoviesID) as Likes from Movies m  INNER join [dbo].[Likes] l on m.MoviesID = l.MoviesId GROUP BY m.MoviesID`
+         var q = ` Select (m.MoviesID) as Movie, count (r.MoviesID) as Ranking from [Movies] m inner join [Rancking] r on m.MoviesID = r.MoviesID where (m.MoviesID like ${id}) GROUP BY m.MoviesID`
+
+        new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
+            return pool.query(q)
+        })
+        .then(result => {
+            var data ={
+                success : true,
+                message : `Mostrando Ranking de la Pelicula`,
                 data : result.recordset
             }
             res.send(data);

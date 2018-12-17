@@ -50,7 +50,7 @@ const sqlconfig = {
     debug: true,
     options: {
         encrypt: true,
-        // instanceName: process.env.DB_INSTANCE_NAME
+        instanceName: process.env.DB_INSTANCE_NAME
     }
 }
 
