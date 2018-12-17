@@ -158,8 +158,10 @@ module.exports = (app, sql, sqlconfig) => {
     //Codigo para Buscar Por Nombre o Genero
 
     app.get("/v1/MoviesShows/:searchTerm", (req, res)=>{
+        
         let search = req.query.search;
-        var q = ``
+
+        var q = `select  * from Movies m inner join Movies_Genres mg  on  m.MoviesID = mg.MoviesID inner join Genres g on  mg.Genres_ID = g.Genres_ID where m.Name like '${search}' or g.Genred like '${search}`
         new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
             return pool.query(q)
         })
@@ -234,8 +236,7 @@ module.exports = (app, sql, sqlconfig) => {
     app.get("/v1/MoviesShows/:id/images", (req, res)=>{
     
         let id = req.params.id;
-        
-               
+                       
         var q =`select Image_URL  from Images inner join Movies on Images.MoviesID = Movies.MoviesID  where Movies.MoviesID like ${id}`
         
         new sql.ConnectionPool(sqlconfig).connect().then(pool =>{
