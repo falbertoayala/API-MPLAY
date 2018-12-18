@@ -46,4 +46,4 @@ jobs:
       # run s3 deploy
       - run: 
           name: Deploy to Elastic Beanstalk
-          command: eb deploy production
+          command: eb deploy apimplay-prd
