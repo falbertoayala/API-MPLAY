@@ -1,20 +1,18 @@
 branch-defaults:
   master:
     environment: production
-environment-defaults:
-  production:
-    branch: null
-    repository: null
+    group_suffix: null
 global:
   application_name: apimplay
+  branch: null
   default_ec2_keyname: null
-  default_platform: arn:aws:elasticbeanstalk:us-west-1::platform/Node.js running on
-    64bit Amazon Linux/4.5.4
-  default_region: us-west-2
+  default_platform: Node.js
+  default_region: us-east-2
   include_git_submodules: true
   instance_profile: null
   platform_name: null
   platform_version: null
   profile: null
+  repository: null
   sc: git
   workspace_type: Application
